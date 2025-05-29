@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MsvcProcessingDataApplication<msvc-processing-data>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.alejandro.msvc_processing_data.MsvcProcessingDataApplication",
+            "projectName": "msvc-processing-data",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
