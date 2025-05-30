@@ -1,8 +1,7 @@
 package com.alejandro.msvc_processing_data.services;
 
-import java.util.List;
-
-import com.alejandro.msvc_processing_data.entity.Transaction;
+import com.alejandro.msvc_processing_data.dto.TransactionResponseDto;
+import com.alejandro.msvc_processing_data.models.Transaction;
 
 public interface TransactionService {
     
@@ -12,7 +11,5 @@ public interface TransactionService {
     // Methods for address entity
     // -----------------------------
 
-    List<Transaction> findAll();
-
-    Transaction save(Transaction transaction);
+    TransactionResponseDto save(Transaction transaction);
 }
