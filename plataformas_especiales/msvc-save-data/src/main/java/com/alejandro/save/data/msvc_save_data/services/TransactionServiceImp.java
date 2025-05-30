@@ -11,6 +11,8 @@ import com.alejandro.save.data.msvc_save_data.dto.TransactionResponseDto;
 import com.alejandro.save.data.msvc_save_data.entities.Transaction2;
 import com.alejandro.save.data.msvc_save_data.repositories.TransactionRepository;
 
+import jakarta.persistence.EntityManager;
+
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -19,6 +21,9 @@ public class TransactionServiceImp implements TransactionService {
     // To inject the repository dependency.
     @Autowired
     private TransactionRepository repository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     // -----------------------------
     // Methods for transaction entity
@@ -48,12 +53,15 @@ public class TransactionServiceImp implements TransactionService {
 
         // If the transaction is present then...
         if (optionalTransaction.isPresent()) {
-            // update that record and return an optional value
-            Transaction2 transactionDb = optionalTransaction.get();
+            int rowsUpdated = repository.updateStatusByIdAndReference(id, status);
 
-            transactionDb.setStatus(status);
+            if (rowsUpdated > 0) {
+                Optional<Transaction2> updated = repository.findById(id);
+                updated.ifPresent(entityManager::refresh); // ← Esto recarga desde la DB
+                return updated;
+            }
 
-            return Optional.of(repository.save(transactionDb));
+            return Optional.empty();
         }
 
         return optionalTransaction;

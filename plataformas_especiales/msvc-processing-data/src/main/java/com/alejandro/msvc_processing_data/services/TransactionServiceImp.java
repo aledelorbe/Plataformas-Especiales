@@ -52,23 +52,23 @@ public class TransactionServiceImp implements TransactionService {
     @Transactional
     public TransactionResponseDto save(Transaction transaction) {
 
-        // try {
-        //     transaction.setSecret(this.decrypt(transaction.getSecret()));
-        // } catch (Exception e) {
-        //     throw new RuntimeException("Error when decript the secret", e);
-        // }
+        try {
+            transaction.setSecret(this.decrypt(transaction.getSecret()));
+        } catch (Exception e) {
+            throw new RuntimeException("Error when decript the secret", e);
+        }
 
         return client.saveTransaction(transaction);
     }
 
     private String decrypt(String encryptedBase64) throws Exception {
 
-        String keyBase64 = "TU_CLAVE_BASE64";
-        String ivBase64 = "TU_IV_BASE64";
+        String KEY = "12345678901234567890123456789012";
+        String IV = "1234567890123456";
 
+        byte[] keyBytes = KEY.getBytes("UTF-8");
+        byte[] ivBytes = IV.getBytes("UTF-8");
         byte[] encryptedBytes = Base64.getDecoder().decode(encryptedBase64);
-        byte[] keyBytes = Base64.getDecoder().decode(keyBase64);
-        byte[] ivBytes = Base64.getDecoder().decode(ivBase64);
 
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES");
@@ -77,6 +77,6 @@ public class TransactionServiceImp implements TransactionService {
         cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
         byte[] decrypted = cipher.doFinal(encryptedBytes);
 
-        return new String(decrypted);
+        return new String(decrypted, "UTF-8");
     }
 }
