@@ -1,4 +1,7 @@
 
-create database transactions;
+create database db_transactions;
 
-use transactions;
+use db_transactions;
+
+select *
+from transaction;

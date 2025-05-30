@@ -4,6 +4,8 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,27 @@ public class TransactionServiceImp implements TransactionService {
     // -----------------------------
     // Methods for transaction entity
     // -----------------------------
+
+    // To list all of clients (records) in the table 'clients'
+    @Override
+    @Transactional(readOnly = true)
+    public List<TransactionResponseDto> findAll() {
+        return client.allTransactions();
+    }
+
+    // To get a specific client based on its reference
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<TransactionResponseDto> findByReference(String reference) {
+        return Optional.ofNullable(client.transactionByReference(reference));
+    }
+
+    // To cancel a certain transaction
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<TransactionResponseDto> cancelTransaction(Long id, String reference, String status) {
+        return Optional.ofNullable(client.cancelTransaction(id, reference, status));
+    }
 
     // To save a new transaction in the db
     @Override
